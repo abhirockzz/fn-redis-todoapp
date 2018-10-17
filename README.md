@@ -1,4 +1,6 @@
-## switch to correct context
+# Redis backed TODO app with Fn Golang functions 
+
+## Switch to correct context
 
 - `fn use context <your context name>`
 - `fn ls apps`
