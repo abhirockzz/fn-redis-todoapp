@@ -21,7 +21,7 @@
 
 - `echo -n 'do this' | DEBUG=1 fn invoke todoapp createtodo`
 
-> Expected response - `{"Status":"SUCCESS","Message":"Created TODO with ID 1"}`
+> Expected response - `{"Status":"SUCCESS","Message":"Created TODO with ID 1", "Todoid":"1"}`
 
 - `echo -n 'do that' | DEBUG=1 fn invoke todoapp createtodo`
 
