@@ -5,7 +5,7 @@
 
 ## Common - create app
 
-`fn create app --annotation oracle.com/oci/subnetIds='["ocid1.subnet.oc1.phx.aaaaaaaaghmsma7mpqhqdhbgnby25u2zo4wqlrrcskvu7jg56dryxt3hgvka"]' --config REDIS_HOST=129.213.91.171 --config REDIS_PORT=6379 --syslog-url=tcp://s3cr3t.papertrailapp.com:19407 todoapp`
+`fn create app --annotation oracle.com/oci/subnetIds='["ocid1.subnet.oc1.phx.aaaaaaaaghmsma7mpqhqdhbgnby25u2zo4wqlrrcskvu7jg56dryxt3hgvka"]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port --syslog-url=tcp://s3cr3t.papertrailapp.com:19407 todoapp`
 
 > `--syslog-url` is optional. Use your own!
 
