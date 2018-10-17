@@ -96,7 +96,7 @@ func createTODOHandler(ctx context.Context, in io.Reader, out io.Writer) {
 		log.Println("created todo:" + strconv.Itoa(int(todoID)))
 		log.Println("added to pending TODOs list...")
 
-		json.NewEncoder(out).Encode(result{Status: successStatus, Message: "Created TODO with ID " + strconv.Itoa(int(todoID))})
+		json.NewEncoder(out).Encode(result{Status: successStatus, Message: "Created TODO with ID " + strconv.Itoa(int(todoID)), Todoid: strconv.Itoa(int(todoID))})
 	} else {
 		json.NewEncoder(out).Encode(result{Status: failedStatus, Message: "failed to create TODO with ID " + strconv.Itoa(int(todoID))})
 	}
@@ -105,4 +105,5 @@ func createTODOHandler(ctx context.Context, in io.Reader, out io.Writer) {
 type result struct {
 	Status  string //`json:"status"`
 	Message string //`json:"message,omitempty"`
+	Todoid  string `json:"Todoid,omitempty"`
 }
