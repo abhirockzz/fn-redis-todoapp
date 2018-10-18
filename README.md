@@ -13,7 +13,7 @@
 
 ### To point to a different Redis instance...
 
-... just udpate the app configuration run below commands
+... execute below commands to update the app configuration
 
 `fn config app todoapp REDIS_HOST your-redis-ip` and `fn config app todoapp REDIS_PORT your-redis-port`
 
