@@ -11,11 +11,11 @@
 
 > `--syslog-url` is optional. Use your own!
 
-### To point to a different Redis instance
+### To point to a different Redis instance...
 
-Jsut udpate the app configuration as below
+... just udpate the app configuration run below commands
 
-`fn update app --annotation oracle.com/oci/subnetIds='["ocid1.subnet.oc1.phx.aaaaaaaaghmsma7mpqhqdhbgnby25u2zo4wqlrrcskvu7jg56dryxt3hgvka"]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port todoapp`
+`fn config app todoapp REDIS_HOST your-redis-ip` and `fn config app todoapp REDIS_PORT your-redis-port`
 
 ## Create TODO function
 
