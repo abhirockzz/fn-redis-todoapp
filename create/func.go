@@ -27,8 +27,8 @@ const successStatus string = "SUCCESS"
 var client *redis.Client
 
 func createTODOHandler(ctx context.Context, in io.Reader, out io.Writer) {
-	redisHost := fdk.Context(ctx).Config["REDIS_HOST"]
-	redisPort := fdk.Context(ctx).Config["REDIS_PORT"]
+	redisHost := fdk.GetContext(ctx).Config()["REDIS_HOST"]
+	redisPort := fdk.GetContext(ctx).Config()["REDIS_PORT"]
 
 	if client == nil {
 		log.Println("Connecting to Redis...")
