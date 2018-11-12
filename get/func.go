@@ -11,20 +11,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
-//var redisHost string
-//var redisPort string
-
 func main() {
 
-	/*redisHost = os.Getenv("REDIS_HOST")
-	if redisHost == "" {
-		redisHost = "localhost"
-	}
-
-	redisPort = os.Getenv("REDIS_PORT")
-	if redisPort == "" {
-		redisPort = "6379"
-	}*/
 	fdk.Handle(fdk.HandlerFunc(getTODOsHandler))
 
 }
@@ -40,8 +28,8 @@ const successStatus string = "SUCCESS"
 var client *redis.Client
 
 func getTODOsHandler(ctx context.Context, in io.Reader, out io.Writer) {
-	redisHost := fdk.Context(ctx).Config["REDIS_HOST"]
-	redisPort := fdk.Context(ctx).Config["REDIS_PORT"]
+	redisHost := fdk.GetContext(ctx).Config()["REDIS_HOST"]
+	redisPort := fdk.GetContext(ctx).Config()["REDIS_PORT"]
 
 	if client == nil {
 		log.Println("Connecting to Redis...")
@@ -75,7 +63,7 @@ func getAllTODOs(in io.Reader, out io.Writer) {
 
 	log.Println("Getting all TODOs...")
 
-	//we jsut scan once with a count of 1000 (assuming num todos is not more than this)
+	//we just scan once with a count of 1000 (assuming num todos is not more than this)
 	//and accept the result as the number of TODOs
 	keys, _, _ := client.Scan(0, todoHashNamePrefix+"*", 1000).Result()
 	numTODOs := len(keys)
@@ -88,10 +76,6 @@ func getAllTODOs(in io.Reader, out io.Writer) {
 	for _, todoHashName := range keys {
 		todoInfoMaps = append(todoInfoMaps, txPipe.HGetAll(todoHashName))
 	}
-
-	/*for i := 1; i <= int(numTODOs); i++ {
-		todoInfoMaps = append(todoInfoMaps, txPipe.HGetAll(todoHashNamePrefix+strconv.Itoa(i)))
-	}*/
 
 	_, execErr := txPipe.Exec()
 
@@ -121,7 +105,10 @@ func getTODOsFiltered(filter string, in io.Reader, out io.Writer) {
 
 	log.Println("searching for TODOs in ", todoListName)
 
-	//how many TODOs ?
+	/*2-step process to get all TODO IDs in the list (not pleasant!) 
+		1. get count with LLEN
+		2. get the content with LRANGE
+	*/
 	numTODOs := client.LLen(todoListName).Val()
 	todoIDs := client.LRange(todoListName, 0, numTODOs).Val()
 

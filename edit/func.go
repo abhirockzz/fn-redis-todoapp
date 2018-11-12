@@ -10,20 +10,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
-//var redisHost string
-//var redisPort string
-
 func main() {
 
-	/*redisHost = os.Getenv("REDIS_HOST")
-	if redisHost == "" {
-		redisHost = "localhost"
-	}
-
-	redisPort = os.Getenv("REDIS_PORT")
-	if redisPort == "" {
-		redisPort = "6379"
-	}*/
 	fdk.Handle(fdk.HandlerFunc(editTODOHandler))
 
 }
@@ -35,8 +23,8 @@ const successStatus string = "SUCCESS"
 var client *redis.Client
 
 func editTODOHandler(ctx context.Context, in io.Reader, out io.Writer) {
-	redisHost := fdk.Context(ctx).Config["REDIS_HOST"]
-	redisPort := fdk.Context(ctx).Config["REDIS_PORT"]
+	redisHost := fdk.GetContext(ctx).Config()["REDIS_HOST"]
+	redisPort := fdk.GetContext(ctx).Config()["REDIS_PORT"]
 
 	if client == nil {
 		log.Println("Connecting to Redis...")
