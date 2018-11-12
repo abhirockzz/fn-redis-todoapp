@@ -12,20 +12,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
-//var redisHost string
-//var redisPort string
-
 func main() {
 
-	/*redisHost = os.Getenv("REDIS_HOST")
-	if redisHost == "" {
-		redisHost = "localhost"
-	}
-
-	redisPort = os.Getenv("REDIS_PORT")
-	if redisPort == "" {
-		redisPort = "6379"
-	}*/
 	fdk.Handle(fdk.HandlerFunc(createTODOHandler))
 
 }
