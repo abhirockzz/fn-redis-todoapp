@@ -4,7 +4,3 @@ version: 0.0.1
 runtime: go
 entrypoint: ./func
 format: http-stream
-triggers:
-- name: gettodos
-  type: http
-  source: /gettodos
