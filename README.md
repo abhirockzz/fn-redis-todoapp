@@ -1,15 +1,15 @@
-# Redis backed TODO app with Fn Golang functions 
+# TODO app with Golang functions and Redis 
 
 ## Switch to correct context
 
 - `fn use context <your context name>`
 - `fn ls apps`
 
-## Common - create app
+## Create an application
 
-`fn create app --annotation oracle.com/oci/subnetIds='["ocid1.subnet.oc1.phx.aaaaaaaaghmsma7mpqhqdhbgnby25u2zo4wqlrrcskvu7jg56dryxt3hgvka"]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port --syslog-url=tcp://s3cr3t.papertrailapp.com:19407 todoapp`
+`fn create app --annotation oracle.com/oci/subnetIds='[<SUBNET_OCID(s)>]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port --syslog-url=tcp://s3cr3t.papertrailapp.com:19407 todoapp`
 
-> `--syslog-url` is optional. Use your own!
+> `--syslog-url` is optional
 
 ### To point to a different Redis instance...
 
