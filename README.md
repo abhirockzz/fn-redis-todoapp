@@ -7,9 +7,7 @@
 
 ## Create an application
 
-`fn create app --annotation oracle.com/oci/subnetIds='[<SUBNET_OCID(s)>]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port --syslog-url=tcp://s3cr3t.papertrailapp.com:19407 todoapp`
-
-> `--syslog-url` is optional
+`fn create app --annotation oracle.com/oci/subnetIds='[<SUBNET_OCID(s)>]' --config REDIS_HOST=your-redis-ip --config REDIS_PORT=your-redis-port todoapp`
 
 ### To point to a different Redis instance...
 
@@ -17,19 +15,23 @@
 
 `fn config app todoapp REDIS_HOST your-redis-ip` and `fn config app todoapp REDIS_PORT your-redis-port`
 
-## Create TODO function
+## To deploy your functions...
 
-`cd create` and then deploy with `fn -v deploy --app todoapp`
+Clone this repository and change into the directory - `cd fn-redis-todoapp`
 
-> Go to OCIR and make sure your repo is converted to PUBLIC
+To deploy all the functions in one go - `fn -v deploy --app todoapp --all`
 
-### create multiple TODOs
+You can choose to deploy one function at a time. You can do so by changing into the function directory and invoking the `fn deploy` command. For e.g. to deploy the create todo function - `cd create` and then deploy with `fn -v deploy --app todoapp`
 
-- `echo -n 'do this' | DEBUG=1 fn invoke todoapp createtodo`
+Once the functions have been deployed, you can test out the CRUD capabilities
+
+## Create TODOs
+
+- `echo -n 'do this' | fn invoke todoapp createtodo`
 
 > Expected response - `{"Status":"SUCCESS","Message":"Created TODO with ID 1", "Todoid":"1"}`
 
-- `echo -n 'do that' | DEBUG=1 fn invoke todoapp createtodo`
+- `echo -n 'do that' | fn invoke todoapp createtodo`
 
 ### check TODOs 
 
@@ -44,15 +46,11 @@ You should see
     completed
     false
 
-## Get TODO function
-
-`cd get` and deploy with `fn -v deploy --app todoapp`
-
-> Go to OCIR and make sure your repo is converted to PUBLIC
+## Get TODOs
 
 ### get all TODOs
 
-`DEBUG=1 fn invoke todoapp gettodos`
+`fn invoke todoapp gettodos`
 
 You should see JSON output
 
@@ -71,7 +69,7 @@ You should see JSON output
 
 ### get completed TODOs
 
-`echo -n 'completed' | DEBUG=1 fn invoke todoapp gettodos`
+`echo -n 'completed' | fn invoke todoapp gettodos`
 
 You will get an empty `[]` array since all the TODOs are pending (see next)
 
@@ -81,7 +79,7 @@ Check in Redis `docker run --rm redis redis-cli -h 129.213.91.171 -p 6379 lrange
 
 ### get pending TODOs
 
-`echo -n 'pending' | DEBUG=1 fn invoke todoapp gettodos`
+`echo -n 'pending' | fn invoke todoapp gettodos`
 
 You should see JSON output
 
@@ -105,17 +103,13 @@ Check in Redis `docker run --rm redis redis-cli -h 129.213.91.171 -p 6379 lrange
 
 ## Toggle TODO (complete or pending)
 
-`cd toggle` and deploy with `fn -v deploy --app todoapp`
-
-> Go to OCIR and make sure your repo is converted to PUBLIC
-
 ### mark completed
 
-`echo -n '{"todoid": "1", "completed":"true"}' | DEBUG=1 fn invoke todoapp toggletodo`
+`echo -n '{"todoid": "1", "completed":"true"}' | fn invoke todoapp toggletodo`
 
 Expected response - `{"Status":"SUCCESS","Message":"Toggled TODO with ID 1 to true"}`
 
-it should show up in completed list - `echo -n 'completed' | DEBUG=1 fn invoke todoapp gettodos`
+it should show up in completed list - `echo -n 'completed' | fn invoke todoapp gettodos`
 
 	[
 	  {
@@ -125,7 +119,7 @@ it should show up in completed list - `echo -n 'completed' | DEBUG=1 fn invoke t
 	  }
 	]
 
-it should NOT show up in pending list - `echo -n 'pending' | DEBUG=1 fn invoke todoapp gettodos`
+it should NOT show up in pending list - `echo -n 'pending' | fn invoke todoapp gettodos`
 
 	[
 	  {
@@ -147,13 +141,13 @@ Responses will be in-line with above results
 
 ### mark pending
 
-`echo -n '{"todoid": "1", "completed":"false"}' | DEBUG=1 fn invoke todoapp toggletodo`
+`echo -n '{"todoid": "1", "completed":"false"}' | fn invoke todoapp toggletodo`
 
 Expected response - `{"Status":"SUCCESS","Message":"Toggled TODO with ID 1 to false"}`
 
-it should NOT show up in completed list - `echo -n 'completed' | DEBUG=1 fn invoke todoapp gettodos`
+it should NOT show up in completed list - `echo -n 'completed' | fn invoke todoapp gettodos`
 
-it should show up in pending list - `echo -n 'pending' | DEBUG=1 fn invoke todoapp gettodos`
+it should show up in pending list - `echo -n 'pending' | fn invoke todoapp gettodos`
 
 	[
 	  {
@@ -170,15 +164,11 @@ it should show up in pending list - `echo -n 'pending' | DEBUG=1 fn invoke todoa
 
 ## Edit TODO function (update title)
 
-`cd edit` and deploy with `fn -v deploy --app todoapp`
-
-> Go to OCIR and make sure your repo is converted to PUBLIC
-
-`echo -n '{"todoid": "2", "title":"new title"}' | DEBUG=1 fn invoke todoapp edittodo`
+`echo -n '{"todoid": "2", "title":"new title"}' | fn invoke todoapp edittodo`
 
 Expected response `{"Status":"SUCCESS","Message":"Updated title for TODO 2"}`
 
-Confirm - `DEBUG=1 fn invoke todoapp gettodos`
+Confirm - `fn invoke todoapp gettodos`
 
 JSON response with updated title for TODO
 
@@ -197,13 +187,11 @@ JSON response with updated title for TODO
 
 ## Delete TODO function
 
-`cd delete` and deploy with `fn -v deploy --app todoapp`
-
-`echo -n '1' | DEBUG=1 fn invoke todoapp deletetodo`
+`echo -n '1' | fn invoke todoapp deletetodo`
 
 Response `{"Status":"SUCCESS","Message":"Deleted TODO 1"}`
 
-Confirm - `DEBUG=1 fn invoke todoapp gettodos`
+Confirm - `fn invoke todoapp gettodos`
 
 JSON reponse with TODO `1` removed
 
